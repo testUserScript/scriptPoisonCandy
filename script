@@ -1,1 +1,51 @@
+local player = game.Players.LocalPlayer
+local guiParent = player:WaitForChild("PlayerGui")
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "ScrollGui"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = guiParent
+
+
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 200, 0, 300)
+mainFrame.Position = UDim2.new(0.5, -100, 0.5, -150)
+mainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+mainFrame.Active = true -- precisa disso p/ arrastar
+mainFrame.Draggable = true
+mainFrame.Parent = screenGui
+
+-- ScrollingFrame dentro do frame
+local scrollFrame = Instance.new("ScrollingFrame")
+scrollFrame.Size = UDim2.new(1, 0, 1, 0)
+scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
+scrollFrame.ScrollBarThickness = 8
+scrollFrame.Parent = mainFrame
+
+-- Layout para organizar os botões em coluna
+local layout = Instance.new("UIListLayout")
+layout.Parent = scrollFrame
+layout.SortOrder = Enum.SortOrder.LayoutOrder
+layout.Padding = UDim.new(0, 5) -- espaço entre botões
+
+-- Função para adicionar botões
+local function addButton(text)
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(1, -10, 0, 40) -- largura ajusta, altura 40
+    btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.Text = text
+    btn.Parent = scrollFrame
+    return btn
+end
+
+-- Exemplo: adiciona 20 botões
+for i = 1, 20 do
+    addButton("Botão " .. i)
+end
+
+-- Atualiza CanvasSize conforme o conteúdo
+layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+    scrollFrame.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 10)
+end)
 
